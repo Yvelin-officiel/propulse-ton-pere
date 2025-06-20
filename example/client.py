@@ -267,8 +267,8 @@ class Game:
         station = self.get(f"/station/{self.sta}")
         planets = self.get(f"/station/{self.sta}/scan")["planets"]
         return sorted(planets,
-                         key=lambda pla: get_dist(station["position"], pla["position"])
-                         )[0]
+                      key=lambda pla: get_dist(station["position"], pla["position"])
+                      )[0]
 
     # - Go back to the station
     # - Unload all the cargo
@@ -296,6 +296,12 @@ class Game:
         self.ship_repair(self.sid)
         self.ship_refuel(self.sid)
 
+    # Check the travel cost to the nearest planet
+    def check_cost_to_nearest_planet(self):
+        nearest = self.scan_nearest_planet()
+        self.check_travel_cost(self.sid, nearest["position"])
+
+    # Check the travel cost to a specific position
     def check_travel_cost(self, sid, dest_pos):
         cost = self.get(f"/ship/{sid}/travelcost/{dest_pos[0]}/{dest_pos[1]}/{dest_pos[2]}")
         print(f"[*] Coût du voyage vers {dest_pos} :")
@@ -304,6 +310,26 @@ class Game:
         print(f"    - Carburant requis : {cost['fuel_consumption']}")
         print(f"    - Usure de la coque : {cost['hull_usage']}")
         return cost
+
+    def check_crew_upgrade(self):
+        upgradelist = self.get(f"/station/{self.sta}/crew/upgrade/ship/{self.sid}")
+        status = game.get("/player/" + str(game.pid))
+        for crew_id, crew_info in upgradelist.items():
+            if crew_info['member-type'] == 'Operator' and int(status["money"]) > (int(crew_info['price']) * 1.5):
+                print(f"[] Amélioration disponible pour l'opérateur:")
+                print(f"\t- ID: {crew_id}")
+                print(f"\t- Prix: {crew_info['price']} crédits")
+                print(f"\t- Rang: {crew_info['rank']}")
+                try:
+                    result = self.get(f"/station/{self.sta}/crew/upgrade/ship/{self.sid}/{crew_id}")
+                    print(f"[*] Amélioration appliquée avec succès : {result}")
+                except SimeisError as e:
+                    print(f"[!] Impossible d'appliquer l'amélioration : {e}")
+
+    def ensure_ship_docked(self):
+        ship = self.get(f"/ship/{self.sid}")
+        station = self.get(f"/station/{self.sta}")
+        return ship["position"] == station["position"]
 
 
 if __name__ == "__main__":
@@ -314,7 +340,8 @@ if __name__ == "__main__":
     while True:
         print("")
         game.disp_status()
+        if game.ensure_ship_docked():
+            game.check_crew_upgrade()
         game.go_mine()
         game.disp_status()
         game.go_sell()
-        game.check_travel_cost()

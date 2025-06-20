@@ -103,6 +103,10 @@ class Game:
     def buy_first_ship(self, sta):
         # Get all the ships available for purchasing in the station
         available = self.get(f"/station/{sta}/shipyard/list")["ships"]
+        # Prices list of available ships
+        print(f"[*] Ships for station {sta}:")
+        for ship in available:
+            print(f"{ship}")
         # Get the cheapest option
         cheapest = sorted(available, key = lambda ship: ship["price"])[0]
         print("[*] Purchasing the first ship for {} credits".format(cheapest["price"]))

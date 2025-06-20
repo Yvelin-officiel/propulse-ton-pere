@@ -81,6 +81,7 @@ class Game:
         else:
             with open(f"./{username}.json", "r") as f:
                 self.player = json.load(f)
+            # profil info
             print(f"[*] Loaded data for player {username}")
             print(f"[*] Player ID: {self.player['playerId']}")
             print(f"[*] Player KEY: {self.player['key']}")

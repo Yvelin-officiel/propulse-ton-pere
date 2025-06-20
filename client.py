@@ -74,12 +74,16 @@ class Game:
                 json.dump(player, f, indent=2)
             print(f"[*] Created player {username}")
             self.player = player
+            print(f"[*] Player ID: {self.player['playerId']}")
+            print(f"[*] Player KEY: {self.player['key']}")
 
         # If an account already exists
         else:
             with open(f"./{username}.json", "r") as f:
                 self.player = json.load(f)
             print(f"[*] Loaded data for player {username}")
+            print(f"[*] Player ID: {self.player['playerId']}")
+            print(f"[*] Player KEY: {self.player['key']}")
 
         # Try to get the profile
         try:

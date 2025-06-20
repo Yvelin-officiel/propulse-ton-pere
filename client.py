@@ -74,12 +74,16 @@ class Game:
                 json.dump(player, f, indent=2)
             print(f"[*] Created player {username}")
             self.player = player
+            print(f"[*] Player ID: {self.player['playerId']}")
+            print(f"[*] Player KEY: {self.player['key']}")
 
         # If an account already exists
         else:
             with open(f"./{username}.json", "r") as f:
                 self.player = json.load(f)
             print(f"[*] Loaded data for player {username}")
+            print(f"[*] Player ID: {self.player['playerId']}")
+            print(f"[*] Player KEY: {self.player['key']}")
 
         # Try to get the profile
         try:
@@ -99,6 +103,10 @@ class Game:
     def buy_first_ship(self, sta):
         # Get all the ships available for purchasing in the station
         available = self.get(f"/station/{sta}/shipyard/list")["ships"]
+        # Prices list of available ships
+        print(f"[*] Ships for station {sta}:")
+        for ship in available:
+            print(f"{ship}")
         # Get the cheapest option
         cheapest = sorted(available, key = lambda ship: ship["price"])[0]
         print("[*] Purchasing the first ship for {} credits".format(cheapest["price"]))

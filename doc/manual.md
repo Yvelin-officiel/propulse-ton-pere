@@ -23,7 +23,7 @@ attendu n’est pas le bon
 La création d’un joueur requiert un nom unique, qui vous donnera accès à un ID de joueur,
 ainsi qu’à une clé d’authentification unique.
 Pour intéragir avec ce joueur, tous les appels à l’API devront comporter un paramètre
-key=<votre clé> dans l’URL de votre query GET.
+key=`<votre clé>` dans l’URL de votre query GET.
 • Endpoint: /player/new/{name}
 • Client: ApiClient::new_player
 Retournera une erreur si le nom du joueur existe déjà

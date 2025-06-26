@@ -8,3 +8,6 @@ release:
 
 optimize:
 	strip target/release/${TARGET_PATH}
+
+manual:
+	typst compile doc/manual.md manuel.pdf

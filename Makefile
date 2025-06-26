@@ -1,4 +1,5 @@
 TARGET_PATH=simeis-server.exe
+all: check test release optimize manual
 
 build:
 	cargo build

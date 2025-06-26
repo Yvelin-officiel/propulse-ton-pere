@@ -1,0 +1,16 @@
+name: Workflow CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: linux-ubuntu-latest
+    steps:
+      - name: Hello World
+        run: echo Hello, world!

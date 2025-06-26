@@ -10,7 +10,8 @@ on:
 
 jobs:
   build:
-    runs-on: linux-ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
-      - name: Hello World
-        run: echo Hello, world!
+      - uses: actions/checkout@v4
+      - name: Build avec Makefile
+        run: make build

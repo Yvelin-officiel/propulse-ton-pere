@@ -11,3 +11,6 @@ optimize:
 
 manual:
 	typst compile doc/manual.md manuel.pdf
+
+check:
+	cargo check

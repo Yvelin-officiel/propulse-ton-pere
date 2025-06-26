@@ -1,5 +1,7 @@
 # Simeis
 
+trigger ci
+
 Jeu à la Spacetrader API
 
 Serveur web avec endpoints API (sans DB dans un premier temps)

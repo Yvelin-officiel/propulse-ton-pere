@@ -6,14 +6,19 @@ on:
       - 'releases/**'
 
 jobs:
-  check-source-branch:
+  close-invalid-pr:
     runs-on: ubuntu-latest
     steps:
       - name: Vérifier la branche source
+        id: check_branch
         run: |
           if [[ "${{ github.head_ref }}" == "main" || "${{ github.head_ref }}" == bug/* ]]; then
-            echo "Branche source valide."
+            echo "ok=true" >> $GITHUB_OUTPUT
           else
-            echo "La branche source doit être 'main' ou commencer par 'bug/'."
-            exit 1
+            echo "ok=false" >> $GITHUB_OUTPUT
           fi
+      - name: Fermer la PR si branche source invalide
+        if: steps.check_branch.outputs.ok == 'false'
+        uses: superbrothers/close-pull-request@v3
+        with:
+          comment: "La branche source doit être 'main' ou commencer par 'bug/'."

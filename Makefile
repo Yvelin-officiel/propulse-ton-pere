@@ -24,3 +24,6 @@ clean:
 
 format:
 	cargo fmt --check
+
+schema:
+	cargo clippy

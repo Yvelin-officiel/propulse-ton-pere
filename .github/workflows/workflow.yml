@@ -18,3 +18,5 @@ jobs:
         run: make check
       - name: Format code
         run: make format
+      - name: Schema validation
+        run : make schema

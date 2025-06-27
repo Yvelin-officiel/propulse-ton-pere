@@ -1,0 +1,14 @@
+name : Quality
+
+# TRIGGER
+on: [pull_request]
+
+# JOBS
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+        run: cargo check
+        run: cargo fmt -- --check
+        run: cargo clippy -- -D warnings
+        run: cargo test

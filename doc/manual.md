@@ -380,7 +380,7 @@ En cas de succès, retournera {"ping": "pong"}
 7.2. Récupérer les logs du système
 Lorsque le jeu réalise une action automatiquement, ou si une alerte est lancée, cela sera
 visible dans les logs associés au joueur.
-Ainsi, les logs montreront lorsque:
+Ainsi, les logs montreront lorsque :
 • Le jeu a commencé pour ce joueur
 • Le joueur a perdu
 • Un vaisseau a atteint sa destination

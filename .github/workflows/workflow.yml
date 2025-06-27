@@ -20,3 +20,5 @@ jobs:
         run: make manual
       - name: Check code style
         run: make check
+      - name: Format code
+        run: make format

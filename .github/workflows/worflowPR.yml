@@ -3,6 +3,8 @@ name: Invalid PR
 on:
   pull_request_target:
     types: [opened]
+    branches:
+      - 'release/**'
 
 jobs:
   run:

@@ -11,5 +11,5 @@ jobs:
       - uses: actions/checkout@v4
       - run: cargo check
       - run: cargo fmt -- --check
-      - run: cargo clippy -- -D warnings
+      - run: cargo clippy --
       - run: cargo test

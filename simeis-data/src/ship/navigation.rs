@@ -119,7 +119,7 @@ fn test_compute_cost_addition() {
                 "Wrong {x}x hull usage"
             );
         }
-        println!("");
+        println!();
     }
 
     let mut ship = Ship::random((0, 0, 0));

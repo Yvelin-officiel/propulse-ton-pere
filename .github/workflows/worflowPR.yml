@@ -1,9 +1,10 @@
-name: Validate PR
+name: Invalid PR
+
 on:
   pull_request_target:
-    types: [assigned, opened, synchronize, reopened]
+    types: [opened, synchronize, reopened]
     branches:
-      - 'releases/**'
+      - 'release/**'
 
 jobs:
   close-invalid-pr:

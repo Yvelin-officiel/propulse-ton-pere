@@ -2,12 +2,10 @@ name: Invalid PR
 
 on:
   pull_request_target:
-    types: [opened, synchronize, reopened]
-    branches:
-      - 'release/**'
+    types: [opened]
 
 jobs:
-  close-invalid-pr:
+  run:
     runs-on: ubuntu-latest
     steps:
       - name: Vérifier la branche source

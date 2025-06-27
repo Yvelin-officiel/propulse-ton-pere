@@ -1,0 +1,19 @@
+name: Validate PR
+on:
+  pull_request_target:
+    types: [assigned, opened, synchronize, reopened]
+    branches:
+      - 'releases/**'
+
+jobs:
+  check-source-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Vérifier la branche source
+        run: |
+          if [[ "${{ github.head_ref }}" == "main" || "${{ github.head_ref }}" == bug/* ]]; then
+            echo "Branche source valide."
+          else
+            echo "La branche source doit être 'main' ou commencer par 'bug/'."
+            exit 1
+          fi

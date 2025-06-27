@@ -7,6 +7,8 @@ on:
 jobs:
   run:
     runs-on: ubuntu-latest
+    permissions:
+      write-all
     steps:
       - name: Vérifier la branche source
         id: check_branch

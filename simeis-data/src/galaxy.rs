@@ -67,7 +67,7 @@ impl Galaxy {
             let planet = planet::Planet::random((x, y, z), &mut rng);
             if self
                 .insert(&(x, y, z), SpaceObject::Planet(Arc::new(planet)))
-                .is_err()
+                .is_none()
             {
                 continue;
             }
@@ -90,12 +90,12 @@ impl Galaxy {
         self.objects.get(coord)
     }
 
-    pub fn insert(&mut self, coord: &SpaceCoord, obj: SpaceObject) -> Result<(), ()> {
+    pub fn insert(&mut self, coord: &SpaceCoord, obj: SpaceObject) -> Option<()> {
         if self.objects.contains_key(coord) {
-            return Err(());
+            return None;
         }
         self.objects.insert(*coord, obj);
-        Ok(())
+        Some(())
     }
 
     fn list_objects_in_sector(&self, sector: &GalaxySector) -> Vec<&SpaceObject> {
@@ -145,7 +145,7 @@ impl Galaxy {
         let sector = self.discovered.get(ind).unwrap();
 
         let Some(SpaceObject::Planet(pla)) = self
-            .list_objects_in_sector(&sector)
+            .list_objects_in_sector(sector)
             .iter()
             .filter(|obj| matches!(obj, SpaceObject::Planet(_)))
             .nth(0)
@@ -157,13 +157,13 @@ impl Galaxy {
         let mut retry_n = 0;
         loop {
             coord = get_rand_coord_near(&pla.position, STATION_FPLANET_DIST, &mut rng);
-            while !is_in_sector(&coord, &sector) || self.get(&coord).is_some() {
+            while !is_in_sector(&coord, sector) || self.get(&coord).is_some() {
                 coord = get_rand_coord_near(&pla.position, STATION_FPLANET_DIST, &mut rng);
             }
 
             let mut mindist = None;
             for pla in self
-                .list_objects_in_sector(&sector)
+                .list_objects_in_sector(sector)
                 .iter()
                 .filter_map(|obj| {
                     if let SpaceObject::Planet(p) = obj {
@@ -196,7 +196,7 @@ impl Galaxy {
         let station = Arc::new(RwLock::new(station::Station::init(id, coord)));
         self.insert(&coord, SpaceObject::BaseStation(station))
             .unwrap();
-        return (id, coord);
+        (id, coord)
     }
 
     pub async fn scan_sector(&self, rank: u8, center: &SpaceCoord) -> ScanResult {
@@ -208,7 +208,7 @@ impl Galaxy {
                 results.add(rank, obj).await;
             }
         }
-        debug_assert!(results.planets.len() > 0); // We should always have some planets
+        debug_assert!(!results.planets.is_empty()); // We should always have some planets
         results
     }
 }

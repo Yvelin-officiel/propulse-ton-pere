@@ -42,10 +42,7 @@ pub enum Resource {
 
 impl Resource {
     pub fn scored(&self) -> bool {
-        match self {
-            Resource::Fuel | Resource::HullPlate => false,
-            _ => true,
-        }
+        matches!(self, Resource::Fuel | Resource::HullPlate)
     }
 
     // TODO (#24) Get from configuration

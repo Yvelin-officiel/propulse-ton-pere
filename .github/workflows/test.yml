@@ -8,6 +8,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run Back
-        run: cargo run
+        run: |
+          cargo run &
+          sleep 45
       - name: Test
         run: python example/test_functional.py

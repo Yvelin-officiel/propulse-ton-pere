@@ -1,7 +1,6 @@
 name: Code coverage
 on:
   pull_request:
-    branches: [ "tp3-test" ]
 
 jobs:
   test:

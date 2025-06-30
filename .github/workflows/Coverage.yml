@@ -1,0 +1,16 @@
+name: Code coverage
+on:
+  pull_request:
+    branches: [ "tp3-test" ]
+
+jobs:
+  test:
+    name: code coverage
+    runs-on: ubuntu-latest
+    container:
+      image: xd009642/tarpaulin:develop-nightly
+      options: --security-opt seccomp=unconfined
+    steps:
+      - name : Generate coverage report
+        run: |
+          cargo +nightly tarpaulin --verbose --all-features --workspace --timeout 120 --out xml

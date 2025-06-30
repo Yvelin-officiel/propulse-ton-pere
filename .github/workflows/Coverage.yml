@@ -10,6 +10,10 @@ jobs:
       image: xd009642/tarpaulin:develop-nightly
       options: --security-opt seccomp=unconfined
     steps:
-      - name : Generate coverage report
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Generate coverage report
         run: |
+          cd $GITHUB_WORKSPACE
           cargo +nightly tarpaulin --verbose --all-features --workspace --timeout 120 --out xml
+      

@@ -424,14 +424,14 @@ async fn buy_crew_upgrade(
 
     let player = get_player!(srv, req);
     let mut player = player.write().await;
-    let mut galaxy = srv.galaxy.write().await;
+    let galaxy = srv.galaxy.read().await;
     let station = get_station!(srv, station_id; player; galaxy);
     let station = station.read().await;
 
     let res = player.upgrade_crew_rank(&station, ship_id, crew_id);
     if res.is_ok() {
         drop(station);
-        player.update_wages(&mut galaxy).await;
+        player.update_wages(&galaxy).await;
     }
     build_response(res.map(|(p, r)| json!({ "new-rank": r, "cost": p})))
 }

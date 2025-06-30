@@ -62,7 +62,7 @@ impl ShipUpgrade {
             ShipUpgrade::HullUpgrade => {
                 format!("Increase the hull decay capacity by {HULL_UPG_ADD}")
             }
-            ShipUpgrade::Shield => format!("Reduce the damage and usure of the hull"),
+            ShipUpgrade::Shield => "Reduce the damage and usure of the hull".to_string(),
         }
     }
 }

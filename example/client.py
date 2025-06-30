@@ -1,29 +1,25 @@
-PORT = 8080
-URL = f"http://127.0.0.1:{PORT}"
+PORT=8080
+URL=f"http://103.45.247.164:{PORT}"
 
 import os
 import sys
 import math
 import time
-import json
+import jsonpy
 import string
 import urllib.request
 
-
 class SimeisError(Exception):
     pass
-
 
 # Théorème de Pythagore pour récupérer la distance entre 2 points dans l'espace 3D
 def get_dist(a, b):
     return math.sqrt(((a[0] - b[0]) ** 2) + ((a[1] - b[1]) ** 2) + ((a[2] - b[2]) ** 2))
 
-
 # Check if types are present in the list
 def check_has(alld, key, *req):
     alltypes = [c[key] for c in alld.values()]
     return all([k in alltypes for k in req])
-
 
 class Game:
     def __init__(self, username):
@@ -33,9 +29,9 @@ class Game:
         self.setup_player(username)
 
         # Useful for our game loops
-        self.pid = self.player["playerId"]  # ID of our player
-        self.sid = None  # ID of our ship
-        self.sta = None  # ID of our station
+        self.pid = self.player["playerId"] # ID of our player
+        self.sid = None    # ID of our ship
+        self.sta = None    # ID of our station
 
     def get(self, path, **qry):
         if hasattr(self, "player"):
@@ -75,7 +71,7 @@ class Game:
         if force_register or not os.path.isfile(f"./{username}.json"):
             player = self.get(f"/player/new/{username}")
             with open(f"./{username}.json", "w") as f:
-                json.dump(player, f, indent=2)
+                json.dump(player, f, indent=2)       
             print(f"[*] Created player {username}")
             self.player = player
 
@@ -104,7 +100,7 @@ class Game:
         # Get all the ships available for purchasing in the station
         available = self.get(f"/station/{sta}/shipyard/list")["ships"]
         # Get the cheapest option
-        cheapest = sorted(available, key=lambda ship: ship["price"])[0]
+        cheapest = sorted(available, key = lambda ship: ship["price"])[0]
         print("[*] Purchasing the first ship for {} credits".format(cheapest["price"]))
         # Buy it
         self.get(f"/station/{sta}/shipyard/buy/" + str(cheapest["id"]))
@@ -213,7 +209,7 @@ class Game:
 
         if len(status["ships"]) == 0:
             self.buy_first_ship(self.sta)
-            status = self.get(f"/player/{self.pid}")  # Update our status
+            status = self.get(f"/player/{self.pid}") # Update our status
         ship = status["ships"][0]
         self.sid = ship["id"]
 
@@ -231,7 +227,12 @@ class Game:
     def go_mine(self):
         print("[*] Starting the Mining operation")
 
-        nearest = self.scan_nearest_planet()
+        # Scan the galaxy sector, detect which planet is the nearest
+        station = self.get(f"/station/{self.sta}")
+        planets = self.get(f"/station/{self.sta}/scan")["planets"]
+        nearest = sorted(planets,
+            key=lambda pla: get_dist(station["position"], pla["position"])
+        )[0]
 
         # If the planet is solid, we need a Miner to mine it
         # If it's gaseous, we need a GasSucker to mine it
@@ -246,7 +247,7 @@ class Game:
             self.buy_first_mining_module(modtype, self.sta, self.sid)
         print("[*] Targeting planet at", nearest["position"])
 
-        self.wait_idle(self.sid)  # If we are currently occupied, wait
+        self.wait_idle(self.sid) # If we are currently occupied, wait
 
         # If we are not current at the position of the target planet, travel there
         if ship["position"] != nearest["position"]:
@@ -259,23 +260,15 @@ class Game:
             print(f"\t- Extraction of {res}: {amnt}/sec")
 
         # Wait until the cargo is full
-        self.wait_idle(self.sid)  # The ship will have the state "Idle" once the cargo is full
+        self.wait_idle(self.sid) # The ship will have the state "Idle" once the cargo is full
         print("[*] The cargo is full, stopping mining process")
-
-    def scan_nearest_planet(self):
-        # Scan the galaxy sector, detect which planet is the nearest
-        station = self.get(f"/station/{self.sta}")
-        planets = self.get(f"/station/{self.sta}/scan")["planets"]
-        return sorted(planets,
-                      key=lambda pla: get_dist(station["position"], pla["position"])
-                      )[0]
 
     # - Go back to the station
     # - Unload all the cargo
     # - Sell it on the market
     # - Refuel & repair the ship
     def go_sell(self):
-        self.wait_idle(self.sid)  # If we are currently occupied, wait
+        self.wait_idle(self.sid) # If we are currently occupied, wait
         ship = self.get(f"/ship/{self.sid}")
         station = self.get(f"/station/{self.sta}")
 
@@ -296,42 +289,6 @@ class Game:
         self.ship_repair(self.sid)
         self.ship_refuel(self.sid)
 
-    # Check the travel cost to the nearest planet
-    def check_cost_to_nearest_planet(self):
-        nearest = self.scan_nearest_planet()
-        self.check_travel_cost(self.sid, nearest["position"])
-
-    # Check the travel cost to a specific position
-    def check_travel_cost(self, sid, dest_pos):
-        cost = self.get(f"/ship/{sid}/travelcost/{dest_pos[0]}/{dest_pos[1]}/{dest_pos[2]}")
-        print(f"[*] Coût du voyage vers {dest_pos} :")
-        print(f"    - Distance : {cost['distance']}")
-        print(f"    - Durée : {cost['duration']} sec")
-        print(f"    - Carburant requis : {cost['fuel_consumption']}")
-        print(f"    - Usure de la coque : {cost['hull_usage']}")
-        return cost
-
-    def check_crew_upgrade(self):
-        upgradelist = self.get(f"/station/{self.sta}/crew/upgrade/ship/{self.sid}")
-        status = game.get("/player/" + str(game.pid))
-        for crew_id, crew_info in upgradelist.items():
-            if crew_info['member-type'] == 'Operator' and int(status["money"]) > (int(crew_info['price']) * 1.5):
-                print(f"[] Amélioration disponible pour l'opérateur:")
-                print(f"\t- ID: {crew_id}")
-                print(f"\t- Prix: {crew_info['price']} crédits")
-                print(f"\t- Rang: {crew_info['rank']}")
-                try:
-                    result = self.get(f"/station/{self.sta}/crew/upgrade/ship/{self.sid}/{crew_id}")
-                    print(f"[*] Amélioration appliquée avec succès : {result}")
-                except SimeisError as e:
-                    print(f"[!] Impossible d'appliquer l'amélioration : {e}")
-
-    def ensure_ship_docked(self):
-        ship = self.get(f"/ship/{self.sid}")
-        station = self.get(f"/station/{self.sta}")
-        return ship["position"] == station["position"]
-
-
 if __name__ == "__main__":
     name = sys.argv[1]
     game = Game(name)
@@ -340,8 +297,6 @@ if __name__ == "__main__":
     while True:
         print("")
         game.disp_status()
-        if game.ensure_ship_docked():
-            game.check_crew_upgrade()
         game.go_mine()
         game.disp_status()
         game.go_sell()

@@ -1,5 +1,5 @@
 PORT=8080
-URL=f"http://127.0.0.1:{PORT}"
+URL=f"http://103.45.247.164:{PORT}"
 
 import os
 import sys
@@ -45,7 +45,7 @@ class Game:
             ])
 
         qry = f"{URL}{path}{tail}"
-        reply = urllib.request.urlopen(qry, timeout=1)
+        reply = urllib.request.urlopen(qry, timeout=5)
 
         data = json.loads(reply.read().decode())
         err = data.pop("error")
@@ -141,12 +141,24 @@ class Game:
         print("[*] Traveling to {}, will take {}".format(pos, costs["duration"]))
         self.wait_idle(sid, ts=costs["duration"])
 
+    def upgrade_ship(self, sta, ship):
+        upgrade_list = self.get(f"/station/{sta}/shop/modules/{ship}/upgrade")
+        print("[*] Upgrad available {}".format(upgrade_list))
+        # Get the profile
+        player = self.get("/player/{}".format(self.player["playerId"]))
+        # Get the price of the 1
+        price = upgrade_list['1']['price']
+        # Buy a upgrade if i have enought money
+        if player["money"] >= price * 1.15:
+            self.get(f"/station/{sta}/shop/modules/{ship}/upgrade/1")
+            print("[*] Upgraded Done !")
+
+
     def wait_idle(self, sid, ts=2):
         ship = self.get(f"/ship/{sid}")
         while ship["state"] != "Idle":
             time.sleep(ts)
             ship = self.get(f"/ship/{sid}")
-
     # Repair the ship:     Buy the plates, then ask for reparation
     def ship_repair(self, sid):
         ship = self.get(f"/ship/{sid}")
@@ -297,6 +309,7 @@ class Game:
 
         self.ship_repair(self.sid)
         self.ship_refuel(self.sid)
+        self.upgrade_ship(self.sta, self.sid)
 
 if __name__ == "__main__":
     name = sys.argv[1]

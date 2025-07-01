@@ -241,7 +241,7 @@ impl Ship {
     pub fn stop_navigation(&mut self) -> Result<SpaceCoord, Errcode> {
         log::debug!("Stopping flight on ship {}", self.id);
         self.state = ShipState::Idle;
-        return Ok(self.position);
+        Ok(self.position)
     }
 
     pub async fn start_extraction(&mut self, galaxy: &Galaxy) -> Result<ExtractionInfo, Errcode> {

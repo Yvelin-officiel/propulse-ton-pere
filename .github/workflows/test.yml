@@ -1,0 +1,15 @@
+name: test.yml
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Back
+        run: |
+          cargo run &
+          sleep 45
+      - name: Test
+        run: python example/test_functional.py

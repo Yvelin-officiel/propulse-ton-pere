@@ -3,6 +3,7 @@ import json
 from client import Game, check_has
 import random
 
+# default scenario
 def test_1():
     username = str(random.randint(10000, 99999))
     game = Game(username)

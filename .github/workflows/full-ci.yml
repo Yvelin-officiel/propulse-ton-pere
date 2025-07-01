@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        job: [rust-python, makefile-typst]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rust/Python
+        if: matrix.job == 'rust-python'
+        run: |
+          cargo build
+          cargo run &
+          until nc -z localhost 8080; do sleep 1; done
+          python example/test_functional.py
+
+      - name: Makefile/Typst
+        if: matrix.job == 'makefile-typst'
+        run: |
+          make build
+          make manual
+          make check
+          make format
+          make schema

@@ -61,7 +61,7 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Tag depuis la release
+      - name: Tag de la release
         id: extract_tag
         run: |
           TAG_NAME=$(echo "${{ github.head_ref }}" | sed -E 's#^releases/##')

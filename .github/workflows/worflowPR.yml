@@ -50,23 +50,20 @@ jobs:
       - name: Générer le changelog de la branche source
         id: changelog
         run: |
-          if [[ "${GITHUB_HEAD_REF}" == "main" ]]; then
+          BRANCH_NAME="${{ github.head_ref }}"
+          if [[ "$BRANCH_NAME" == "main" ]]; then
             TITLE="## Changelog de la MEP (main)"
-          elif [[ "${GITHUB_HEAD_REF}" == bug/* ]]; then
-            TITLE="## Changelog de la release bug (${GITHUB_HEAD_REF})"
-          elif [[ "${GITHUB_HEAD_REF}" == feature/* ]]; then
-            TITLE="## Changelog de la release feature (${GITHUB_HEAD_REF})"
+          elif [[ "$BRANCH_NAME" == bug/* ]]; then
+            TITLE="## Changelog de la release bug ($BRANCH_NAME)"
+          elif [[ "$BRANCH_NAME" == feature/* ]]; then
+            TITLE="## Changelog de la release feature ($BRANCH_NAME)"
           else
-            TITLE="## Changelog de la PR (${GITHUB_HEAD_REF})"
+            TITLE="## Changelog de la PR ($BRANCH_NAME)"
           fi
 
           echo "$TITLE" > changelog.md
-          git fetch origin "${GITHUB_HEAD_REF}" "${GITHUB_BASE_REF}"
-          git log "origin/${GITHUB_BASE_REF}..origin/${GITHUB_HEAD_REF}" --pretty=format:"- %s" >> changelog.md
-
-          CHANGELOG_CONTENT=$(cat changelog.md | sed ':a;N;$!ba;s/\n/%0A/g')
-
-          echo "changelog=$CHANGELOG_CONTENT" >> $GITHUB_OUTPUT
+          CHANGELOG_CONTENT=$(sed ':a;N;$!ba;s/\n/%0A/g' changelog.md)
+          echo "changelog=$CHANGELOG_CONTENT" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Tag de la release

@@ -179,9 +179,6 @@ impl Ship {
     }
 
     pub fn compute_travel_costs(&self, destination: SpaceCoord) -> Result<TravelCost, Errcode> {
-        let ShipState::Idle = self.state else {
-            return Err(Errcode::ShipNotIdle);
-        };
         let travel = Travel::new(destination);
         let cost = travel.compute_costs(self)?;
         Ok(cost)
@@ -244,7 +241,7 @@ impl Ship {
     pub fn stop_navigation(&mut self) -> Result<SpaceCoord, Errcode> {
         log::debug!("Stopping flight on ship {}", self.id);
         self.state = ShipState::Idle;
-        return Ok(self.position);
+        Ok(self.position)
     }
 
     pub async fn start_extraction(&mut self, galaxy: &Galaxy) -> Result<ExtractionInfo, Errcode> {

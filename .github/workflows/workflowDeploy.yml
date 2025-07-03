@@ -13,12 +13,16 @@ jobs:
           uses: actions/checkout@v3
 
         - name: Installer les dépendances
-          run: sudo apt-get update && sudo apt-get install -y dpkg-dev gzip php
+          run: sudo apt-get update && sudo apt-get install -y dpkg-dev gzip
 
         - name: Créer l'utilisateur système simeis
           run: |
             sudo useradd --system --no-create-home --shell /usr/sbin/nologin simeis || true
             sudo usermod -aG sudo simeis
+        
+        - name: Créer le binaire Simeis
+          run: |
+            cargo build --release 
 
         - name: Installer le binaire Simeis
           run: |

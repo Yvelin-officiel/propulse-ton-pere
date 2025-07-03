@@ -26,7 +26,7 @@ jobs:
 
         - name: Installer le binaire Simeis
           run: |
-            sudo install -Dm755 ./simeis-server /usr/local/bin/simeis-server
+            sudo cp target/release/simeis-server /usr/local/bin/
             sudo chown root:simeis /usr/local/bin/simeis-server
 
         - name: Installer la page de manuel

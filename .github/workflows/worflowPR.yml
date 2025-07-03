@@ -50,23 +50,23 @@ jobs:
       - name: Générer le changelog de la branche source
         id: changelog
         run: |
-          if [[ "${{ github.head_ref }}" == "main" ]]; then
+          if [[ "${GITHUB_HEAD_REF}" == "main" ]]; then
             TITLE="## Changelog de la MEP (main)"
-          elif [[ "${{ github.head_ref }}" == bug/* ]]; then
-            TITLE="## Changelog de la release bug (${{ github.head_ref }})"
-          elif [[ "${{ github.head_ref }}" == feature/* ]]; then
-            TITLE="## Changelog de la release feature (${{ github.head_ref }})"
+          elif [[ "${GITHUB_HEAD_REF}" == bug/* ]]; then
+            TITLE="## Changelog de la release bug (${GITHUB_HEAD_REF})"
+          elif [[ "${GITHUB_HEAD_REF}" == feature/* ]]; then
+            TITLE="## Changelog de la release feature (${GITHUB_HEAD_REF})"
           else
-            TITLE="## Changelog de la PR (${{ github.head_ref }})"
+            TITLE="## Changelog de la PR (${GITHUB_HEAD_REF})"
           fi
           echo "$TITLE" > changelog.md
-          git fetch origin ${{ github.head_ref }} ${{ github.base_ref }}
-          git log origin/${{ github.base_ref }}..origin/${{ github.head_ref }} --pretty=format:"- %s" >> changelog.md
+          git fetch origin "${GITHUB_HEAD_REF}" "${GITHUB_BASE_REF}"
+          git log "origin/${GITHUB_BASE_REF}..origin/${GITHUB_HEAD_REF}" --pretty=format:"- %s" >> changelog.md
           {
             echo "CHANGELOG<<EOF"
             cat changelog.md
             echo "EOF"
-          } >> $GITHUB_ENV
+          } >> "$GITHUB_ENV"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Tag de la release

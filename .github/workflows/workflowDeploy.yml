@@ -1,0 +1,43 @@
+name: Deploiement SIMEIS
+
+on:
+    release:
+        types: [created]
+    push:
+        tags:
+            - 'v*'
+
+jobs:
+    build:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+
+        - name: Installer les dépendances
+          run: sudo apt-get update && sudo apt-get install -y dpkg-dev gzip php
+
+        - name: Créer l'utilisateur système simeis
+          run: |
+            sudo useradd --system --no-create-home --shell /usr/sbin/nologin simeis || true
+            sudo usermod -aG sudo simeis
+
+        - name: Installer le binaire Simeis
+          run: |
+            sudo install -Dm755 ./simeis-server /usr/local/bin/simeis-server
+            sudo chown root:simeis /usr/local/bin/simeis-server
+
+        - name: Installer la page de manuel
+          run: |
+            sudo install -Dm644 ./propulse-ton-pere.1 /usr/share/man/man1/propulse-ton-pere.1
+            sudo gzip -f /usr/share/man/man1/propulse-ton-pere.1
+
+        - name: Installer la configuration systemd
+          run: |
+            sudo install -Dm644 ./simeis.service /etc/systemd/system/simeis.service
+
+        - name: Autoriser, démarrer et activer le service
+          run: |
+            sudo systemctl daemon-reload
+            sudo systemctl enable simeis.service
+            sudo systemctl start simeis.service

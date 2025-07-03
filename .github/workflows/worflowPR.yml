@@ -1,6 +1,7 @@
 name: Invalid PR
 
 on:
+
   pull_request_target:
     types: [opened]
     branches:
@@ -25,6 +26,19 @@ jobs:
         uses: superbrothers/close-pull-request@v3
         with:
           comment: "La branche source doit être 'main' ou commencer par 'bug/'."
+      - uses: actions/checkout@v4
+      - uses: typst-community/setup-typst@v3
+      - name: Build avec Makefile
+        run: make build
+      - name: Build documentation
+        run: make manual
+      - name: Check code style
+        run: make check
+      - name: Format code
+        run: make format
+      - name: Schema validation
+        run:
+          make schema
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Hash et message du commit dans les variables d'environnement
@@ -47,5 +61,5 @@ jobs:
             Message du commit :
             ${{ env.GIT_MESSAGE }}
           files: |
-            build/*.exe
+            doc/manual.pdf
           clear_attachments: true

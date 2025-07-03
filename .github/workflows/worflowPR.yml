@@ -64,7 +64,7 @@ jobs:
       - name: Tag de la release
         id: extract_tag
         run: |
-          TAG_NAME=$(echo "${{ github.head_ref }}" | sed -E 's#^releases/##')
+          TAG_NAME=$(echo "${{ github.base_ref }}" | sed -E 's#^releases/##')
           echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
       - name: Publier la release automatiquement
         uses: mini-bomba/create-github-release@v1.1.3

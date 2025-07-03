@@ -16,7 +16,7 @@ jobs:
       - name: Vérifier la branche source
         id: check_branch
         run: |
-          if [[ "${{ github.head_ref }}" == "main" || "${{ github.head_ref }}" == bug/* ]]; then
+          if [[ "${{ github.head_ref }}" == "main" || "${{ github.head_ref }}" == bug/* || "${{ github.head_ref }}" == feature/* ]]; then
             echo "ok=true" >> $GITHUB_OUTPUT
           else
             echo "ok=false" >> $GITHUB_OUTPUT

@@ -47,15 +47,21 @@ jobs:
           echo "GIT_MESSAGE<<EOF" >> $GITHUB_ENV
           git log -1 --pretty=%B >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
-      - name: Générer le changelog automatiquement
+      - name: Générer le changelog de la branche source
         id: changelog
         run: |
-          echo "## Features" > changelog.md
-          gh pr list --state merged --search "base:releases/" --json title,number,headRefName,url --jq '.[] | select(.headRefName | test("^feature/")) | "- [#" + (.number|tostring) + "](" + .url + "): " + .title' >> changelog.md
-          echo -e "\n## Bugfix" >> changelog.md
-          gh pr list --state merged --search "base:releases/" --json title,number,headRefName,url --jq '.[] | select(.headRefName | test("^bug/")) | "- [#" + (.number|tostring) + "](" + .url + "): " + .title' >> changelog.md
-          echo -e "\n## Autre" >> changelog.md
-          gh pr list --state merged --search "base:releases/" --json title,number,headRefName,url --jq '.[] | select((.headRefName | test("^feature/") | not) and (.headRefName | test("^bug/") | not)) | "- [#" + (.number|tostring) + "](" + .url + "): " + .title' >> changelog.md
+          if [[ "${{ github.head_ref }}" == "main" ]]; then
+            TITLE="## Changelog de la MEP (main)"
+          elif [[ "${{ github.head_ref }}" == bug/* ]]; then
+            TITLE="## Changelog de la release bug (${GITHUB_HEAD_REF})"
+          elif [[ "${{ github.head_ref }}" == feature/* ]]; then
+            TITLE="## Changelog de la release feature (${GITHUB_HEAD_REF})"
+          else
+            TITLE="## Changelog de la PR (${GITHUB_HEAD_REF})"
+          fi
+          echo "$TITLE" > changelog.md
+          git fetch origin ${{ github.head_ref }} ${{ github.base_ref }}
+          git log origin/${{ github.base_ref }}..origin/${{ github.head_ref }} --pretty=format:"- %s" >> changelog.md
           echo "CHANGELOG<<EOF" >> $GITHUB_ENV
           cat changelog.md >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

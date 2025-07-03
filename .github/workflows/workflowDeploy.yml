@@ -1,11 +1,9 @@
 name: Deploiement SIMEIS
 
 on:
-    release:
-        types: [created]
-    push:
-        tags:
-            - 'v*'
+    pull_request:
+        branches:
+            - main
 
 jobs:
     build:

@@ -53,18 +53,20 @@ jobs:
           if [[ "${{ github.head_ref }}" == "main" ]]; then
             TITLE="## Changelog de la MEP (main)"
           elif [[ "${{ github.head_ref }}" == bug/* ]]; then
-            TITLE="## Changelog de la release bug (${GITHUB_HEAD_REF})"
+            TITLE="## Changelog de la release bug (${{ github.head_ref }})"
           elif [[ "${{ github.head_ref }}" == feature/* ]]; then
-            TITLE="## Changelog de la release feature (${GITHUB_HEAD_REF})"
+            TITLE="## Changelog de la release feature (${{ github.head_ref }})"
           else
-            TITLE="## Changelog de la PR (${GITHUB_HEAD_REF})"
+            TITLE="## Changelog de la PR (${{ github.head_ref }})"
           fi
           echo "$TITLE" > changelog.md
           git fetch origin ${{ github.head_ref }} ${{ github.base_ref }}
           git log origin/${{ github.base_ref }}..origin/${{ github.head_ref }} --pretty=format:"- %s" >> changelog.md
-          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
-          cat changelog.md >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          {
+            echo "CHANGELOG<<EOF"
+            cat changelog.md
+            echo "EOF"
+          } >> $GITHUB_ENV
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Tag de la release

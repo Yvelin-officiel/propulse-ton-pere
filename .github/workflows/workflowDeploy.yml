@@ -1,0 +1,48 @@
+name: Deploiement SIMEIS
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Installer les dépendances
+        run: sudo apt-get update && sudo apt-get install -y dpkg-dev gzip
+
+      - name: Compiler le binaire
+        run: cargo build --release
+
+      - name: Préparer l’arborescence du paquet
+        run: |
+          mkdir -p package/usr/bin
+          mkdir -p package/usr/share/man/man1
+          mkdir -p package/etc/systemd/system
+          mkdir -p package/DEBIAN
+
+          cp target/release/simeis-server package/usr/bin/
+          cp propulse-ton-pere.1 package/usr/share/man/man1/
+          gzip -f package/usr/share/man/man1/propulse-ton-pere.1
+          cp simeis.service package/etc/systemd/system/
+          cp packaging/control package/DEBIAN/
+          cp packaging/preinst package/DEBIAN/
+          cp packaging/postinst package/DEBIAN/
+
+          chmod 755 package/DEBIAN/preinst
+          chmod 755 package/DEBIAN/postinst
+
+      - name: Créer le paquet .deb
+        run: dpkg-deb --build package simeis_1.0.0.deb
+
+      - name: Uploader le paquet .deb en tant qu’artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: simeis-deb
+          path: simeis_1.0.0.deb

@@ -1,4 +1,4 @@
-name: Invalid PR
+name: Deploy release
 
 on:
   pull_request_target:
@@ -27,8 +27,6 @@ jobs:
           comment: "La branche source doit être 'main' ou commencer par 'bug/'."
       - uses: actions/checkout@v4
       - uses: typst-community/setup-typst@v3
-      - name: Checkout repository
-        uses: actions/checkout@v3
 
       - name: Installer les dépendances
         run: sudo apt-get update && sudo apt-get install -y dpkg-dev gzip

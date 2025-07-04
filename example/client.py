@@ -1,11 +1,11 @@
 PORT=8080
-URL=f"http://103.45.247.164:{PORT}"
+URL=f"http://127.0.0.1:{PORT}"
 
 import os
 import sys
 import math
 import time
-import jsonpy
+import json
 import string
 import urllib.request
 

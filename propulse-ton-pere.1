@@ -1,0 +1,56 @@
+.TH SIMEIS 6 "03 juillet 2025" "v1.0" "Manuel du jeu Simeis"
+.SH NO
+
+SIMEIS \- Jeu de gestion spatiale compétitive avec flotte, équipage et ressources
+
+.SH SYNOPSIS
+.B cargo run
+
+.SH DESCRIPTION
+Simeis est un jeu de gestion spatiale dans lequel chaque joueur commence avec une station spatiale et un peu de crédits. Le but est d’assembler une flotte de vaisseaux, de recruter un équipage et d’exploiter des ressources planétaires pour s’enrichir.
+
+.SH MÉCANIQUES PRINCIPALES
+.PP
+Chaque joueur commence avec :
+.IP \(bu 2
+Une station spatiale personnelle
+.IP \(bu 2
+Un capital de crédits de départ
+
+.PP
+La station comprend plusieurs services :
+.TP
+.B Marchand de vaisseaux
+Permet d’acheter des vaisseaux pour constituer votre flotte.
+
+.TP
+.B Pôle Emploi
+Permet de recruter des membres d’équipage. Chaque membre doit être assigné à un vaisseau spécifique et touche un salaire déduit chaque seconde.
+
+.TP
+.B Marchand de modules
+Permet d’acheter les modules nécessaires à l’exploitation des planètes.
+
+.SH FARMING
+Pour extraire des ressources, un vaisseau doit :
+.IP \(bu 2
+Être équipé d’un module compatible :
+.br
+\- Module Miner pour les planètes solides
+.br
+\- Module GasSucker pour les planètes gazeuses
+
+.SH AMÉLIORATIONS
+Modules, vaisseaux et membres d’équipage peuvent être améliorés :
+
+.TP
+.B Trader
+Réduit les frais de transaction au marché
+
+.TP
+.B Pilot
+Réduit la consommation de carburant et le temps de trajet
+
+.TP
+.B Operator
+Augmente la productivité du module, débloque de nouveaux matériaux

@@ -1,0 +1,14 @@
+[Unit]
+Description=Service du jeu SIMEIS Kellian & Jules
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=simeis
+ExecStart=/usr/local/bin/simeis-server
+
+[Install]
+WantedBy=multi-user.target

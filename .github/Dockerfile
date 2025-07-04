@@ -1,6 +1,5 @@
 FROM debian:bookworm-slim
 
-# Installer uniquement les dépendances d'exécution nécessaires (ex : libssl si ton binaire le requiert)
 RUN apt-get update && apt-get install -y libssl-dev 
 
 WORKDIR /app

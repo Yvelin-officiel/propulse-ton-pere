@@ -50,11 +50,10 @@ jobs:
       - name: Générer le changelog de la branche source
         id: changelog
         run: |
-          echo "CHANGELOG :"
           BRANCH_NAME="${{ github.head_ref }}"
           REPO_URL="https://github.com/${{ github.repository }}"
           BRANCH_URL="$REPO_URL/tree/$BRANCH_NAME"
-          echo "Lien de la branche source : $BRANCH_URL"
+          echo "CHANGELOG=Lien de la branche source : $BRANCH_URL" >> $GITHUB_ENV
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Tag de la release

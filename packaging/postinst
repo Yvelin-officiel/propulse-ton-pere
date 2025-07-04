@@ -1,0 +1,16 @@
+#!/bin/sh
+set -e
+
+# Donner les bons droits au binaire
+chown root:simeis /usr/bin/simeis-server
+chmod 755 /usr/bin/simeis-server
+
+# Recharger systemd
+systemctl daemon-reexec || true
+systemctl daemon-reload || true
+
+# Activer et démarrer le service
+systemctl enable simeis.service || true
+systemctl start simeis.service || true
+
+exit 0

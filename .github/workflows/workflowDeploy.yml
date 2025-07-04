@@ -2,8 +2,9 @@ name: Deploiement SIMEIS
 
 on:
   push:
-    tags:
-      - 'v*.*.*'  # Ex: v1.0.0, v1.2.3
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   build:

@@ -1,4 +1,4 @@
-name: Invalid PR
+name: Deploy release
 
 on:
   pull_request_target:
@@ -27,8 +27,6 @@ jobs:
           comment: "La branche source doit être 'main' ou commencer par 'bug/'."
       - uses: actions/checkout@v4
       - uses: typst-community/setup-typst@v3
-      - name: Checkout repository
-        uses: actions/checkout@v3
 
       - name: Installer les dépendances
         run: sudo apt-get update && sudo apt-get install -y dpkg-dev gzip
@@ -95,10 +93,6 @@ jobs:
         run: |
           TAG_NAME=$(echo "${{ github.base_ref }}" | sed -E 's#^releases/##')
           echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
-      - name: Télécharger l’artefact .deb
-        uses: actions/download-artifact@v4
-        with:
-          name: simeis-deb
       - name: Publier la release automatiquement
         uses: mini-bomba/create-github-release@v1.1.3
         with:

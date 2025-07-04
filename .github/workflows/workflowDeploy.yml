@@ -31,9 +31,9 @@ jobs:
           cp propulse-ton-pere.1 package/usr/share/man/man1/
           gzip -f package/usr/share/man/man1/propulse-ton-pere.1
           cp simeis.service package/etc/systemd/system/
-          cp control package/DEBIAN/
-          cp preinst package/DEBIAN/
-          cp postinst package/DEBIAN/
+          cp packaging/control package/DEBIAN/
+          cp packaging/preinst package/DEBIAN/
+          cp packaging/postinst package/DEBIAN/
 
           chmod 755 package/DEBIAN/preinst
           chmod 755 package/DEBIAN/postinst

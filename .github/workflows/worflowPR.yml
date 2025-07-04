@@ -50,20 +50,11 @@ jobs:
       - name: Générer le changelog de la branche source
         id: changelog
         run: |
+          echo "CHANGELOG :"
           BRANCH_NAME="${{ github.head_ref }}"
-          if [[ "$BRANCH_NAME" == "main" ]]; then
-            TITLE="## Changelog de la MEP (main)"
-          elif [[ "$BRANCH_NAME" == bug/* ]]; then
-            TITLE="## Changelog de la release bug ($BRANCH_NAME)"
-          elif [[ "$BRANCH_NAME" == feature/* ]]; then
-            TITLE="## Changelog de la release feature ($BRANCH_NAME)"
-          else
-            TITLE="## Changelog de la PR ($BRANCH_NAME)"
-          fi
-
-          echo "$TITLE" > changelog.md
-          CHANGELOG_CONTENT=$(sed ':a;N;$!ba;s/\n/%0A/g' changelog.md)
-          echo "changelog=$CHANGELOG_CONTENT" >> "$GITHUB_OUTPUT"
+          REPO_URL="https://github.com/${{ github.repository }}"
+          BRANCH_URL="$REPO_URL/tree/$BRANCH_NAME"
+          echo "Lien de la branche source : $BRANCH_URL"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Tag de la release

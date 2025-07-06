@@ -99,7 +99,7 @@ jobs:
           name: simeis-deb
       - name: Vérification que le binaire est bien présent
         run: |
-          ls -l build/
+          ls -l target/release/
       - name: Build Docker image
         run: |
           docker build -t simeis-server.exe -f .github/Dockerfile .

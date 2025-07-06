@@ -13,3 +13,13 @@ cargo run
 ```
 cargo test
 ```
+
+# Release
+
+```
+
+Pour release il suffit de créer une branche releases/x.x.x et push sur celle-ci 
+
+```
+
+

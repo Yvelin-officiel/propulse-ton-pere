@@ -69,8 +69,6 @@ jobs:
       - name: Schema validation
         run:
           make schema
-      - name: Checkout code
-        uses: actions/checkout@v4
       - name: Hash et message du commit dans les variables d'environnement
         run: |
           echo "GIT_HASH=$(git rev-parse --short=8 HEAD)" >> $GITHUB_ENV

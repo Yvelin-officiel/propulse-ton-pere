@@ -98,6 +98,10 @@ jobs:
       - name: Vérification que le binaire est bien présent
         run: |
           ls -l
+      - name: Vérifier le binaire compilé
+        run: ls -lh simeis-server/target/release/
+      - name: Lister les exécutables générés
+        run: find simeis-server/target/release -type f -executable
       - name: Build Docker image
         run: |
           docker build -t simeis-server.exe -f .github/Dockerfile .

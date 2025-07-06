@@ -60,8 +60,6 @@ jobs:
         with:
           name: simeis-deb
           path: simeis_1.0.0.deb
-      - name: Build avec Makefile
-        run: make build
       - name: Build documentation
         run: make manual
       - name: Check code style
@@ -99,7 +97,7 @@ jobs:
           name: simeis-deb
       - name: Vérification que le binaire est bien présent
         run: |
-          ls -l target/release/
+          ls -l
       - name: Build Docker image
         run: |
           docker build -t simeis-server.exe -f .github/Dockerfile .

@@ -97,9 +97,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: simeis-deb
+      - name: Vérification que le binaire est bien présent
+        run: |
+          ls -l build/
       - name: Build Docker image
         run: |
-          docker build -t simeis-server -f .github/Dockerfile .
+          docker build -t simeis-server.exe -f .github/Dockerfile .
       - name: Save Docker image to tar file
         run: |
           docker save simeis-server -o simeis-server.tar

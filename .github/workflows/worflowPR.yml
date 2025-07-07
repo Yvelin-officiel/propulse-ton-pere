@@ -90,7 +90,7 @@ jobs:
       - name: Télécharger l’artefact .deb
         uses: actions/download-artifact@v4
         with:
-          name: simeis-deb
+          name: simeis-propulse-ton-pere-deb
       - name: Copier le binaire pour Docker
         run: cp target/release/simeis-server ./simeis-server-bin
       - name: Build Docker image

@@ -102,7 +102,7 @@ jobs:
         run: cp target/release/simeis-server ./simeis-server-bin
       - name: Build Docker image
         run: |
-          docker build -t simeis-server.exe -f .github/Dockerfile .
+          docker build -t simeis-server -f .github/Dockerfile .
       - name: Save Docker image to tar file
         run: |
           docker save simeis-server -o simeis-server.tar

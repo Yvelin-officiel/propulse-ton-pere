@@ -52,12 +52,12 @@ jobs:
           chmod 755 package/DEBIAN/preinst
           chmod 755 package/DEBIAN/postinst
       - name: Créer le paquet .deb
-        run: dpkg-deb --build package simeis_1.0.0.deb
+        run: dpkg-deb --build package simeis-propulse-ton-pere-deb-1.4.4.deb
       - name: Uploader le paquet .deb en tant qu’artefact
         uses: actions/upload-artifact@v4
         with:
           name: simeis-propulse-ton-pere-deb
-          path: simeis_1.0.0.deb
+          path: simeis-propulse-ton-pere-deb-1.4.4.deb
       - name: Build documentation
         run: make manual
       - name: Check code style
@@ -122,6 +122,6 @@ jobs:
             ${{ env.CHANGELOG }}
           files: |
             doc/manual.pdf
-            simeis_1.0.0.deb
+            simeis-propulse-ton-pere-deb-1.4.4.deb
             simeis-server.tar
           clear_attachments: true

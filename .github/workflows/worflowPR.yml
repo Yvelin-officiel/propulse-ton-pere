@@ -98,8 +98,8 @@ jobs:
           ls -l
       - name: Vérifier le binaire compilé
         run: ls -lh target/release/
-      - name: Copier le binaire pour le Docker build
-        run: cp target/release/simeis-server ./
+      - name: Copier le binaire pour Docker
+        run: cp target/release/simeis-server ./simeis-server-bin
       - name: Build Docker image
         run: |
           docker build -t simeis-server.exe -f .github/Dockerfile .

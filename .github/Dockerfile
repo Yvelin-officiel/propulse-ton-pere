@@ -2,7 +2,7 @@ FROM debian:bullseye-slim
 
 WORKDIR /app
 
-COPY simeis-server /app/simeis-server
+COPY simeis-server-bin /app/simeis-server
 
 RUN chmod +x /app/simeis-server
 

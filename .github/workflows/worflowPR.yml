@@ -44,7 +44,7 @@ jobs:
           cp target/release/simeis-server package/usr/bin/simeis-server-propulse-ton-pere
           cp propulse-ton-pere.1 package/usr/share/man/man1/
           gzip -f package/usr/share/man/man1/propulse-ton-pere.1
-          cp simeis.service package/etc/systemd/system/
+          cp simeis.service package/etc/systemd/system/simeisKellianJules.service
           cp packaging/control package/DEBIAN/
           cp packaging/preinst package/DEBIAN/
           cp packaging/postinst package/DEBIAN/

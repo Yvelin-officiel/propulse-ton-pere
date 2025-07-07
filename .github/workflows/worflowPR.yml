@@ -51,10 +51,8 @@ jobs:
 
           chmod 755 package/DEBIAN/preinst
           chmod 755 package/DEBIAN/postinst
-
       - name: Créer le paquet .deb
         run: dpkg-deb --build package simeis_1.0.0.deb
-
       - name: Uploader le paquet .deb en tant qu’artefact
         uses: actions/upload-artifact@v4
         with:
@@ -93,11 +91,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: simeis-deb
-      - name: Vérification que le binaire est bien présent
-        run: |
-          ls -l
-      - name: Vérifier le binaire compilé
-        run: ls -lh target/release/
       - name: Copier le binaire pour Docker
         run: cp target/release/simeis-server ./simeis-server-bin
       - name: Build Docker image

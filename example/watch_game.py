@@ -17,7 +17,7 @@ class SimeisError(Exception):
     pass
 
 NMAX=30
-WIDTH=100
+WIDTH=120
 SCORE="█"
 POTENTIAL="▒"
 VOID=" "

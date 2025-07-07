@@ -1,0 +1,9 @@
+Package: simeis-propulseton-pere
+Version: 1.0.0
+Section: base
+Priority: optional
+Architecture: amd64
+Maintainer: ""
+Description: Serveur spatial SIMEIS
+ Serveur de simulation spatiale pour le jeu Propulse ton père.
+ Fournit une API de gestion, un moteur de jeu et des services associés.

@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+# Créer l'utilisateur système simeis s'il n'existe pas
+if ! id "simeis" >/dev/null 2>&1; then
+    echo "Création de l'utilisateur système 'simeis'..."
+    useradd --system --no-create-home --shell /usr/sbin/nologin simeis
+fi
+
+exit 0

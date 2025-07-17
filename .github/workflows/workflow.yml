@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # Aucun cache ? Nul part ?
       - uses: typst-community/setup-typst@v3
       - name: Build avec Makefile
         run: make build
@@ -18,5 +19,5 @@ jobs:
         run: make check
       - name: Format code
         run: make format
-      - name: Schema validation
+      - name: Schema validation  # Lint, pas schema
         run : make schema

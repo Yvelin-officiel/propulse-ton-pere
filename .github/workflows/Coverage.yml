@@ -6,6 +6,8 @@ jobs:
   test:
     name: code coverage
     runs-on: ubuntu-latest
+    # Oui mais non, on veut éviter une supply chain attack, utiliser une version
+    # installée avec cargo-install sera beaucoup plus safe
     container:
       image: xd009642/tarpaulin:develop-nightly
       options: --security-opt seccomp=unconfined
@@ -16,4 +18,5 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
           cargo +nightly tarpaulin --verbose --all-features --workspace --timeout 120 --out xml
+      # Dans le cas où le coverage est trop faible, ici il ne se passe rien, donc notre workflow ne sert à rien
       

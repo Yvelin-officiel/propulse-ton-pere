@@ -8,7 +8,7 @@ Type=simple
 Restart=always
 RestartSec=1
 User=simeis
-ExecStart=/usr/local/bin/simeis-server
+ExecStart=/usr/local/bin/simeis-server-jules-kellian # è_é j'ai les coupables
 
 [Install]
 WantedBy=multi-user.target

@@ -1,6 +1,7 @@
 name: test.yml
 on:
   pull_request:
+    # Les tests fonctionnels ne doivent s'effectuer que sur les branches release
 
 jobs:
   test:
@@ -15,11 +16,11 @@ jobs:
             ~/.cargo/git
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - name: Build Rust
-        run: cargo build
+      - name: Build Rust # Build simeis, pas rust
+        run: cargo build  # Avec la feature "testing" normalement
       - name: Run Back
         run: |
           cargo run &
-          until nc -z localhost 8080; do sleep 1; done
+          until nc -z localhost 8080; do sleep 1; done  # Si notre serveur ne démarre pas, c'est une boucle infinie
       - name: Test
         run: python example/test_functional.py

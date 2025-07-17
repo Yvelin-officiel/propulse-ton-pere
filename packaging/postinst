@@ -6,11 +6,12 @@ chown root:simeis /usr/bin/simeis-server
 chmod 755 /usr/bin/simeis-server
 
 # Recharger systemd
-systemctl daemon-reexec || true
+systemctl daemon-reexec || true  # Inutile, d'où sortez vous ça ?
 systemctl daemon-reload || true
 
 # Activer et démarrer le service
 systemctl enable simeis.service || true
+# Il faut aussi stopper la version active du service avant de démarrer la nouvelle version
 systemctl start simeis.service || true
 
 exit 0
